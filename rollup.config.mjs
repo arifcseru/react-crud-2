@@ -1,26 +1,27 @@
-import resolve from "@rollup/plugin-node-resolve";
-import commonjs from "@rollup/plugin-commonjs";
-import typescript from "@rollup/plugin-typescript";
-import babel from "@rollup/plugin-babel";
+import babel from '@rollup/plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
+// import { terser } from '@rollup/plugin-terser'; // ✅ Correct import
+
+import terser from '@rollup/plugin-terser';
+
 
 export default {
-  input: "src/index.tsx",
+  input: 'src/index.tsx',
   output: [
     {
-      file: "dist/index.js",
-      format: "cjs",
-      exports: "auto"
+      file: 'dist/index.js',
+      format: 'cjs'
     },
     {
-      file: "dist/index.es.js",
-      format: "es"
+      file: 'dist/index.es.js',
+      format: 'es'
     }
   ],
-  external: ["react", "react-dom"],
   plugins: [
     resolve(),
     commonjs(),
-    typescript(),
-    babel({ babelHelpers: "bundled" })
+    babel({ babelHelpers: 'bundled', presets: ['@babel/preset-react'] }),
+    terser()
   ]
 };

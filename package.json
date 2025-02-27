@@ -7,7 +7,7 @@
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c rollup.config.mjs"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
@@ -29,6 +29,16 @@
   "license": "MIT",
   "readme": "README.md",
   "devDependencies": {
-    "@rollup/plugin-babel": "^6.0.4"
+    "@babel/core": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "rollup": "^4.34.8"
+  },
+  "dependencies": {
+    "tslib": "^2.8.1"
   }
 }
