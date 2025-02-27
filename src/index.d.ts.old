@@ -1,0 +1,11 @@
+declare module 'react-digital-watch' {
+    import React from 'react';
+
+    interface DigitalWatchProps {
+        format?: string; // '12-hour' or '24-hour'
+        color?: string;
+    }
+
+    const DigitalWatch: React.FC<DigitalWatchProps>;
+    export default DigitalWatch;
+}
