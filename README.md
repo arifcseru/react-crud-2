@@ -16,7 +16,7 @@ Here is an example of how to use the `react-digital-watch` component in your Rea
 
 ```jsx
 import React from 'react';
-import DigitalWatch from 'react-digital-watch';
+import { DigitalWatch } from 'react-digital-watch';
 
 function App() {
     return (
