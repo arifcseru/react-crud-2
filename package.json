@@ -27,6 +27,7 @@
   ],
   "author": "Arifur Rahman",
   "license": "MIT",
+  "readme": "README.md",
   "devDependencies": {
     "@rollup/plugin-babel": "^6.0.4"
   }
