@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-const DigitalWatch = () => {
+interface DigitalWatchProps {
+  showDate: boolean;
+}
+
+const DigitalWatch: React.FC<DigitalWatchProps> = ({ showDate }) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -11,6 +15,7 @@ const DigitalWatch = () => {
   return (
     <div>
       <h2>{time.toLocaleTimeString()}</h2>
+      {showDate && <p style={{ fontSize: "small" }}>{time.toLocaleDateString()}</p>}
     </div>
   );
 };
