@@ -20,7 +20,7 @@ const DigitalWatch: React.FC<DigitalWatchProps> = ({ showDate, bengaliDate }) =>
   return (
     <div>
       <h2>{time.toLocaleTimeString()}</h2>
-      {showDate && (
+      {showDate && !bengaliDate && (
         <p style={{ fontSize: "small" }}>
           {time.toLocaleDateString()}
         </p>

@@ -16,6 +16,7 @@
   "files": [
     "dist"
   ],
+  "homepage": "https://react-digital-watch.github.io/",
   "repository": {
     "type": "git",
     "url": "https://github.com/arifcseru/react-digital-watch.git"
