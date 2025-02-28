@@ -1,4 +1,4 @@
-# React Digital Watch
+# React CRUD 2
 
 This is a simple crud form component for React that supports all features for create read update and delete.
 
@@ -69,7 +69,7 @@ The `ReactCrud` component accepts the following props:
 
 | Prop       | Type   | Default | Description                           |
 |------------|--------|---------|---------------------------------------|
-| `language` | string | `en`    | The language code for the watch display. Supported languages: `en`, `es`, `fr`, `de`, etc. |
+| `language` | string | `en`    | The language code for the watch display. Supported languages: `en`, `bd`, `es`, `fr`, `de`, etc. |
 
 ## License
 
