@@ -52,6 +52,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ storeData, formTitle, formEntryDa
           e.preventDefault();
           const updatedList = [...crudListData, formData];
           setCrudListData(updatedList);
+          setFormData(formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {}));
           storeData(formData);
         }}
       >
