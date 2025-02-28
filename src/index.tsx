@@ -1,3 +1,4 @@
-import DigitalWatch from "./DigitalWatch"; // ✅ No need for `.jsx` extension
+// import ReactCrud from "./ReactCrud"; // ✅ No need for `.jsx` extension
 
-export { DigitalWatch };
+
+export { default as ReactCrud } from './ReactCrud';

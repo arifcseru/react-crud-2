@@ -1,7 +1,7 @@
 {
   "name": "react-crud-2",
   "type": "module",
-  "version": "1.0.1",
+  "version": "1.0.14",
   "description": "A CRUD form component helper for React",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -29,18 +29,8 @@
   "author": "Arifur Rahman",
   "license": "MIT",
   "readme": "README.md",
-  "devDependencies": {
-    "@babel/core": "^7.26.9",
-    "@babel/preset-react": "^7.26.3",
-    "@rollup/plugin-babel": "^6.0.4",
-    "@rollup/plugin-commonjs": "^28.0.2",
-    "@rollup/plugin-node-resolve": "^16.0.0",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^12.1.2",
-    "@types/react": "^19.0.10",
-    "rollup": "^3.29.5"
-  },
   "dependencies": {
     "tslib": "^2.8.1"
-  }
+  },
+  "yalcSig": "99c32192fcda3c58587e7bb6496ebe51"
 }
