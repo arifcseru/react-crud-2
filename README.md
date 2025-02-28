@@ -18,7 +18,6 @@ Here is an example of how to use the `react-crud-2` component in your React appl
 import React from 'react';
 import { ReactCrud } from 'react-crud-2';
 
-
 const formData = [
   {
     name: "firstName",
@@ -49,18 +48,28 @@ const formData = [
     value: ""
   }
 ];
+const storeData = () => {
+  console.log("Store Data event");
+}
+const listData = [{ 'id': 1, name: 'John', email: 'test@mail.com' }];
+const fieldsToShow = ['firstName', 'lastName', 'email', 'address'];
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <ReactCrud formTitle="User Registration" data={formData} />
-      </header>
+    <div>
+      <div className="App">
+        <ReactCrud formTitle={"Employee Data"}
+          storeData={storeData}
+          formEntryData={formData}
+          listData={listData}
+          fieldsToShow={fieldsToShow} />
+      </div>
     </div>
   );
 }
 
 export default App;
+
 ```
 
 ## Props
