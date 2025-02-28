@@ -16,15 +16,48 @@ Here is an example of how to use the `react-digital-watch` component in your Rea
 
 ```jsx
 import React from 'react';
-import { ReactCrud } from 'react-digital-watch';
+import { ReactCrud } from 'react-crud-2';
+
+
+const formData = [
+  {
+    name: "firstName",
+    type: "text",
+    label: "First Name",
+    placeholder: "Enter your first name",
+    value: ""
+  },
+  {
+    name: "lastName",
+    type: "text",
+    label: "Last Name",
+    placeholder: "Enter your last name",
+    value: ""
+  },
+  {
+    name: "email",
+    type: "email",
+    label: "Email",
+    placeholder: "Enter your email",
+    value: ""
+  },
+  {
+    name: "address",
+    type: "textarea",
+    label: "Address",
+    placeholder: "Enter Address",
+    value: ""
+  }
+];
 
 function App() {
-    return (
-        <div>
-            <h1>Digital Watch</h1>
-            <ReactCrud language="en" />
-        </div>
-    );
+  return (
+    <div className="App">
+      <header className="App-header">
+        <ReactCrud formTitle="User Registration" data={formData} />
+      </header>
+    </div>
+  );
 }
 
 export default App;

@@ -9,12 +9,12 @@ interface Field {
 }
 
 interface ReactCrudProps {
-  showDate: boolean;
-  bengaliDate: boolean;
+  formTitle: string;
   data: Field[];
+  createData: (formData: { [key: string]: string }) => void;
 }
 
-const ReactCrud: React.FC<ReactCrudProps> = ({ showDate, bengaliDate, data }) => {
+const ReactCrud: React.FC<ReactCrudProps> = ({ createData, formTitle, data }) => {
   const [time, setTime] = useState(new Date());
   const [formData, setFormData] = useState<{ [key: string]: string }>(
     data.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {})
@@ -36,18 +36,13 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ showDate, bengaliDate, data }) =>
 
   return (
     <div>
-      <h2>{time.toLocaleTimeString()}</h2>
-      {showDate && !bengaliDate && (
-        <p style={{ fontSize: "small" }}>
-          {time.toLocaleDateString()}
-        </p>
-      )}
-      {showDate && bengaliDate && (
-        <p style={{ fontSize: "small" }}>
-          {getBengaliDate(time)}
-        </p>
-      )}
-      <form>
+      <h2>{formTitle}</h2>
+
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        console.log(formData);
+        createData(formData);
+      }}>
         {data.map((field) => (
           <div key={field.name}>
             <label htmlFor={field.name}>{field.label}</label>
@@ -60,6 +55,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ showDate, bengaliDate, data }) =>
             />
           </div>
         ))}
+        <input type="submit" value="Submit" />
       </form>
     </div>
   );
