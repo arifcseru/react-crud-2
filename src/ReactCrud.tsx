@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Col, Container, Row, Table } from "react-bootstrap";
 import axios from "axios";
 
 interface Field {
@@ -46,7 +45,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ storeData, formTitle, formEntryDa
   };
 
   return (
-    <Container>
+    <div className="container">
       <h2>{formTitle}</h2>
 
       <form
@@ -55,8 +54,8 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ storeData, formTitle, formEntryDa
           const updatedList = [...crudListData, formData];
           setCrudListData(updatedList);
           setFormData(formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {}));
-            storeData(formData);
-            axios.post(apiUrl, formData)
+          storeData(formData);
+          axios.post(apiUrl, formData)
             .then(response => {
               console.log("Data successfully posted:", response.data);
             })
@@ -66,13 +65,13 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ storeData, formTitle, formEntryDa
         }}
       >
         {formEntryData.map((field) => (
-          <Row key={field.name} className="mb-3">
-            <Col md={3}>
+          <div key={field.name} className="row mb-3">
+            <div className="col col-md-3" >
               <label htmlFor={field.name} className="form-label">
                 {field.label}
               </label>
-            </Col>
-            <Col md={9}>
+            </div>
+            <div className="col col-md-9">
               {(field.type == 'text' || field.type == 'date' || field.type == 'number' || field.type == 'email') &&
                 <input
                   type={field.type}
@@ -90,15 +89,15 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ storeData, formTitle, formEntryDa
                   placeholder={field.placeholder}
                   onChange={handleChange}
                 >{formData[field.name]}</textarea>}
-            </Col>
-          </Row>
+            </div>
+          </div>
         ))}
         <button type="submit" className="btn btn-primary">
           Submit
         </button>
       </form>
 
-      {listData && <Table striped bordered hover>
+      {listData && <div className="table">
         <thead>
           <tr>
             {fieldsToShow.map((field) => (
@@ -139,9 +138,9 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ storeData, formTitle, formEntryDa
             </tr>
           ))}
         </tbody>
-      </Table>
+      </div>
       }
-    </Container>
+    </div>
   );
 };
 
