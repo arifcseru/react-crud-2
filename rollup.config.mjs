@@ -3,6 +3,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import babel from "@rollup/plugin-babel";
 import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
+import json from "@rollup/plugin-json";
 
 export default {
   input: "src/index.tsx",
@@ -19,6 +20,7 @@ export default {
     }
   ],
   plugins: [
+    json(),
     resolve(),
     commonjs(),
     babel({ babelHelpers: "bundled" }),
