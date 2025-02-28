@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Col, Container, Row, Table } from "react-bootstrap";
+import axios from "axios";
 
 interface Field {
   name: string;
@@ -15,9 +16,10 @@ interface ReactCrudProps {
   storeData: (formData: { [key: string]: string }) => void;
   listData: { [key: string]: string }[];
   fieldsToShow: string[];
+  apiUrl: string;
 }
 
-const ReactCrud: React.FC<ReactCrudProps> = ({ storeData, formTitle, formEntryData, listData, fieldsToShow }) => {
+const ReactCrud: React.FC<ReactCrudProps> = ({ storeData, formTitle, formEntryData, listData, fieldsToShow, apiUrl }) => {
   const [time, setTime] = useState(new Date());
   const [formData, setFormData] = useState<{ [key: string]: string }>(
     formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {})
@@ -53,7 +55,14 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ storeData, formTitle, formEntryDa
           const updatedList = [...crudListData, formData];
           setCrudListData(updatedList);
           setFormData(formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {}));
-          storeData(formData);
+            storeData(formData);
+            axios.post(apiUrl, formData)
+            .then(response => {
+              console.log("Data successfully posted:", response.data);
+            })
+            .catch(error => {
+              console.error("There was an error posting the data:", error);
+            });
         }}
       >
         {formEntryData.map((field) => (
