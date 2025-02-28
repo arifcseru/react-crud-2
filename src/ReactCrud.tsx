@@ -38,7 +38,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ storeData, formTitle, formEntryDa
     return date.toLocaleDateString("bn-BD");
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -64,14 +64,23 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ storeData, formTitle, formEntryDa
               </label>
             </Col>
             <Col md={9}>
-              <input
-                type={field.type}
-                className="form-control"
-                name={field.name}
-                placeholder={field.placeholder}
-                value={formData[field.name]}
-                onChange={handleChange}
-              />
+              {(field.type == 'text' || field.type == 'date' || field.type == 'number' || field.type == 'email') &&
+                <input
+                  type={field.type}
+                  className="form-control"
+                  name={field.name}
+                  placeholder={field.placeholder}
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                />}
+
+              {(field.type == 'textarea') &&
+                <textarea
+                  className="form-control"
+                  name={field.name}
+                  placeholder={field.placeholder}
+                  onChange={handleChange}
+                >{formData[field.name]}</textarea>}
             </Col>
           </Row>
         ))}
