@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 
 interface Field {
   name: string;
@@ -40,30 +40,34 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ createData, formTitle, data }) =>
       <h2>{formTitle}</h2>
 
       <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        console.log(formData);
-        createData(formData);
-      }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          console.log(formData);
+          createData(formData);
+        }}
       >
-      {data.map((field) => (
-        <div key={field.name} className="mb-3">
-        <label htmlFor={field.name} className="form-label">
-          {field.label}
-        </label>
-        <input
-          type={field.type}
-          className="form-control"
-          name={field.name}
-          placeholder={field.placeholder}
-          value={formData[field.name]}
-          onChange={handleChange}
-        />
-        </div>
-      ))}
-      <button type="submit" className="btn btn-primary">
-        Submit
-      </button>
+        {data.map((field) => (
+          <Row key={field.name} className="mb-3">
+            <Col md={3}>
+              <label htmlFor={field.name} className="form-label">
+                {field.label}
+              </label>
+            </Col>
+            <Col md={9}>
+              <input
+                type={field.type}
+                className="form-control"
+                name={field.name}
+                placeholder={field.placeholder}
+                value={formData[field.name]}
+                onChange={handleChange}
+              />
+            </Col>
+          </Row>
+        ))}
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
       </form>
     </Container>
   );
