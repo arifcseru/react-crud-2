@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row, Table } from "react-bootstrap";
 
 interface Field {
   name: string;
@@ -11,15 +11,23 @@ interface Field {
 
 interface ReactCrudProps {
   formTitle: string;
-  data: Field[];
-  createData: (formData: { [key: string]: string }) => void;
+  formEntryData: Field[];
+  storeData: (formData: { [key: string]: string }) => void;
+  listData: { [key: string]: string }[];
+  fieldsToShow: string[];
 }
 
-const ReactCrud: React.FC<ReactCrudProps> = ({ createData, formTitle, data }) => {
+const ReactCrud: React.FC<ReactCrudProps> = ({ storeData, formTitle, formEntryData, listData, fieldsToShow }) => {
   const [time, setTime] = useState(new Date());
   const [formData, setFormData] = useState<{ [key: string]: string }>(
-    data.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {})
+    formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {})
   );
+
+  const [crudListData, setCrudListData] = useState(listData);
+
+  useEffect(() => {
+    setCrudListData(listData);
+  }, [listData]);
 
   useEffect(() => {
     const interval = setInterval(() => setTime(new Date()), 1000);
@@ -42,11 +50,12 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ createData, formTitle, data }) =>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          console.log(formData);
-          createData(formData);
+          const updatedList = [...crudListData, formData];
+          setCrudListData(updatedList);
+          storeData(formData);
         }}
       >
-        {data.map((field) => (
+        {formEntryData.map((field) => (
           <Row key={field.name} className="mb-3">
             <Col md={3}>
               <label htmlFor={field.name} className="form-label">
@@ -69,6 +78,50 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ createData, formTitle, data }) =>
           Submit
         </button>
       </form>
+
+      {listData && <Table striped bordered hover>
+        <thead>
+          <tr>
+            {fieldsToShow.map((field) => (
+              <th key={field}>{field}</th>
+            ))}
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {crudListData.map((item, index) => (
+            <tr key={index}>
+              {fieldsToShow.map((field) => (
+                <td key={field}>{item[field]}</td>
+              ))}
+              <td>
+                <button
+                  className="btn btn-warning"
+                  onClick={() => {
+                    const selectedItem = listData[index];
+                    setFormData(selectedItem);
+                  }}
+                >
+                  Edit
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => {
+                    const updatedList = listData.filter((_, i) => i !== index);
+                    // Assuming you have a state to manage listData, you need to update it here
+                    // For example, if you have a state like `const [data, setData] = useState(listData);`
+                    // You would call `setData(updatedList);`
+                    setCrudListData(updatedList);
+                  }}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      }
     </Container>
   );
 };

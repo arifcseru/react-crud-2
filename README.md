@@ -1,18 +1,18 @@
 # React Digital Watch
 
-This is a simple digital clock component for React that supports multiple languages.
+This is a simple crud form component for React that supports all features for create read update and delete.
 
 ## Installation
 
 To install the package, use npm:
 
 ```bash
-npm install react-digital-watch
+npm install react-crud-2
 ```
 
 ## Usage
 
-Here is an example of how to use the `react-digital-watch` component in your React application:
+Here is an example of how to use the `react-crud-2` component in your React application:
 
 ```jsx
 import React from 'react';
