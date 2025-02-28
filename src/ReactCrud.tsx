@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Container } from "react-bootstrap";
 
 interface Field {
   name: string;
@@ -35,29 +36,36 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ createData, formTitle, data }) =>
   };
 
   return (
-    <div>
+    <Container>
       <h2>{formTitle}</h2>
 
-      <form onSubmit={(e) => {
+      <form
+      onSubmit={(e) => {
         e.preventDefault();
         console.log(formData);
         createData(formData);
-      }}>
-        {data.map((field) => (
-          <div key={field.name}>
-            <label htmlFor={field.name}>{field.label}</label>
-            <input
-              type={field.type}
-              name={field.name}
-              placeholder={field.placeholder}
-              value={formData[field.name]}
-              onChange={handleChange}
-            />
-          </div>
-        ))}
-        <input type="submit" value="Submit" />
+      }}
+      >
+      {data.map((field) => (
+        <div key={field.name} className="mb-3">
+        <label htmlFor={field.name} className="form-label">
+          {field.label}
+        </label>
+        <input
+          type={field.type}
+          className="form-control"
+          name={field.name}
+          placeholder={field.placeholder}
+          value={formData[field.name]}
+          onChange={handleChange}
+        />
+        </div>
+      ))}
+      <button type="submit" className="btn btn-primary">
+        Submit
+      </button>
       </form>
-    </div>
+    </Container>
   );
 };
 
