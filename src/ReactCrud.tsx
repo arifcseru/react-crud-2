@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 
 interface Field {
   name: string;
@@ -55,13 +54,6 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ storeData, formTitle, formEntryDa
           setCrudListData(updatedList);
           setFormData(formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {}));
           storeData(formData);
-          axios.post(apiUrl, formData)
-            .then(response => {
-              console.log("Data successfully posted:", response.data);
-            })
-            .catch(error => {
-              console.error("There was an error posting the data:", error);
-            });
         }}
       >
         {formEntryData.map((field) => (
