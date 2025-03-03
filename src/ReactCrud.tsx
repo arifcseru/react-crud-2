@@ -67,12 +67,15 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
             }
           }
 
-          const updatedList = [...crudListData, formData];
-          setCrudListData(updatedList);
-          setFormData(formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {}));
+          //const updatedList = [...crudListData, formData];
+          //setCrudListData(updatedList);
+          // setFormData(formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {}));
 
           dataStoreHook(formData).then(() => {
+            console.log("formData:", JSON.stringify(formData));
             const existingIndex = crudListData.findIndex(item => item.id === formData.id);
+            console.log("existingIndex:", existingIndex);
+
             if (existingIndex !== -1) {
               const updatedList = crudListData.map((item, index) =>
                 index === existingIndex ? formData : item
