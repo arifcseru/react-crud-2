@@ -88,8 +88,6 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
               const updatedList = [...crudListData, formData];
               setCrudListData(updatedList);
             }
-            const updatedList = [...crudListData, formData];
-            setCrudListData(updatedList);
             setFormData(formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {}));
           }).catch((error) => {
             console.error("Error storing data:", error);
