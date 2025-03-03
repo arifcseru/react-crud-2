@@ -118,7 +118,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
                 >{formData[field.name]}</textarea>}
             </div>}
 
-            {(field.type != 'hidden') && <input
+            {(field.type == 'hidden') && <input
               type={'hidden'}
               className="form-control"
               name={field.name}
