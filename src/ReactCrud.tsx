@@ -77,9 +77,12 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
             console.log("existingIndex:", existingIndex);
 
             if (existingIndex !== -1) {
+              console.log(crudListData);
               const updatedList = crudListData.map((item, index) =>
                 index === existingIndex ? formData : item
               );
+              console.log(updatedList);
+
               setCrudListData(updatedList);
             } else {
               const updatedList = [...crudListData, formData];
