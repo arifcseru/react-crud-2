@@ -20,6 +20,15 @@ import { ReactCrud } from 'react-crud-2';
 
 const formData = [
   {
+    isRequired: false,
+    name: "id",
+    type: "hidden",
+    label: "Id",
+    placeholder: "Enter your id",
+    value: ""
+  },
+  {
+    isRequired: true,
     name: "firstName",
     type: "text",
     label: "First Name",
@@ -27,6 +36,7 @@ const formData = [
     value: ""
   },
   {
+    isRequired: true,
     name: "lastName",
     type: "text",
     label: "Last Name",
@@ -34,6 +44,15 @@ const formData = [
     value: ""
   },
   {
+    isRequired: true,
+    name: "dob",
+    type: "date",
+    label: "Date Of Birth",
+    placeholder: "Enter Date Of Birth",
+    value: ""
+  },
+  {
+    isRequired: true,
     name: "email",
     type: "email",
     label: "Email",
@@ -41,6 +60,7 @@ const formData = [
     value: ""
   },
   {
+    isRequired: true,
     name: "address",
     type: "textarea",
     label: "Address",
@@ -48,9 +68,22 @@ const formData = [
     value: ""
   }
 ];
-const storeData = () => {
-  console.log("Store Data event");
+
+const saveEmployee = (formData) => {
+  return new Promise((resolve, reject) => {
+    console.log("Store Data triggered.");
+    axios.post("https://jsonplaceholder.typicode.com/todos", formData)
+      .then(response => {
+        console.log("Data successfully posted:", response.data);
+        resolve(response.data);
+      })
+      .catch(error => {
+        console.error("There was an error posting the data:", error);
+        reject(error);
+      });
+  });
 }
+
 const listData = [{ 'id': 1, name: 'John', email: 'test@mail.com' }];
 const fieldsToShow = ['firstName', 'lastName', 'email', 'address'];
 
@@ -59,7 +92,7 @@ function App() {
     <div>
       <div className="App">
         <ReactCrud formTitle={"Employee Data"}
-          storeData={storeData}
+          dataStoreHook={saveEmployee}
           formEntryData={formData}
           listData={listData}
           fieldsToShow={fieldsToShow} />
