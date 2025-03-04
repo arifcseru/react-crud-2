@@ -84,6 +84,22 @@ const saveEmployee = (formData) => {
   });
 }
 
+
+const deleteEmployee = (id) => {
+  return new Promise((resolve, reject) => {
+    console.log("Delete Data triggered.");
+    axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
+      .then(response => {
+        console.log("Data successfully deleted:", response.data);
+        resolve(response.data);
+      })
+      .catch(error => {
+        console.error("There was an error deleting the data:", error);
+        reject(error);
+      });
+  });
+}
+
 const listData = [{ 'id': 1, name: 'John', email: 'test@mail.com' }];
 const fieldsToShow = ['firstName', 'lastName', 'email', 'address'];
 
@@ -93,6 +109,7 @@ function App() {
       <div className="App">
         <ReactCrud formTitle={"Employee Data"}
           dataStoreHook={saveEmployee}
+          dataRemoveHook={deleteEmployee}
           formEntryData={formData}
           listData={listData}
           fieldsToShow={fieldsToShow} />
