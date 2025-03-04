@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-paginate/theme/basic/react-paginate.css';
 import { Modal, Button, Card, Container } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
+import 'font-awesome/css/font-awesome.min.css';
 
 interface Field {
   isRequired: boolean;
