@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import 'react-paginate/dist/react-paginate.css';
 import { Modal, Button, Card } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 
@@ -166,7 +167,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
         </Card.Header>
         <Card.Body>
 
-          {currentItems && <div className="table">
+          {currentItems && <table className="table">
             <thead>
               <tr>
                 {crudListDataLabels.map((field) => (
@@ -209,7 +210,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
                 </tr>
               ))}
             </tbody>
-          </div>
+          </table>
           }
         </Card.Body>
         <Card.Footer>
