@@ -70,7 +70,6 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
   const offset = currentPage * itemsPerPage;
   const currentItems = crudListData.slice(offset, offset + itemsPerPage);
 
-
   return (
     <div className="container">
       <Modal show={showModal} onHide={handleClose}>
@@ -170,7 +169,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
         </Card.Header>
         <Card.Body>
 
-         {crudListData && <div className="table">
+         {currentItems && <div className="table">
             <thead>
               <tr>
                 {crudListDataLabels.map((field) => (
@@ -180,7 +179,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
               </tr>
             </thead>
             <tbody>
-              {crudListData.map((item, index) => (
+              {currentItems.map((item, index) => (
                 <tr key={index}>
                   {fieldsToShow.map((field) => (
                     <td key={field}>{item[field]}</td>
@@ -189,7 +188,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
                     <button
                       className="btn btn-warning"
                       onClick={() => {
-                      const selectedItem = crudListData[index];
+                      const selectedItem = currentItems[index];
                       setFormData(selectedItem);
                       handleShow();
                       }}
@@ -202,7 +201,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
                       if (!window.confirm("Are you sure you want to delete this item?")) {
                         return;
                       }
-                      const updatedList = crudListData.filter((_, i) => i !== index);
+                      const updatedList = currentItems.filter((_, i) => i !== index);
                       setCrudListData(updatedList);
                       }}
                     >
