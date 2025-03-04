@@ -33,8 +33,7 @@ const formData = [
     type: "text",
     label: "First Name",
     placeholder: "Enter your first name",
-    value: "",
-    isRequired: true
+    value: ""
   },
   {
     isRequired: true,
@@ -42,8 +41,7 @@ const formData = [
     type: "text",
     label: "Last Name",
     placeholder: "Enter your last name",
-    value: "",
-    isRequired: false
+    value: ""
   },
   {
     isRequired: true,
@@ -54,12 +52,12 @@ const formData = [
     value: ""
   },
   {
+    isRequired: true,
     name: "email",
     type: "email",
     label: "Email",
     placeholder: "Enter your email",
-    value: "",
-    isRequired: true
+    value: ""
   },
   {
     isRequired: true,
@@ -67,8 +65,7 @@ const formData = [
     type: "textarea",
     label: "Address",
     placeholder: "Enter Address",
-    value: "",
-    isRequired: false
+    value: ""
   }
 ];
 
@@ -104,14 +101,6 @@ const deleteEmployee = (id) => {
 }
 
 const listData = [{ 'id': 1, name: 'John', email: 'test@mail.com' }];
-
-const dataStoreHook = async (formData) => {
-  console.log("Storing data:", formData);
-  // Your API call or state management logic here
-  return formData; // Return the updated form data
-};
-
-const listData = [{ 'id': 1, 'firstName': 'John', 'lastName': 'Doe', 'email': 'test@mail.com', 'address': '123 Main St' }];
 const fieldsToShow = ['firstName', 'lastName', 'email', 'address'];
 
 function App() {
@@ -123,9 +112,7 @@ function App() {
           dataRemoveHook={deleteEmployee}
           formEntryData={formData}
           listData={listData}
-          fieldsToShow={fieldsToShow}
-          apiUrl="/api/employees" 
-        />
+          fieldsToShow={fieldsToShow} />
       </div>
     </div>
   );
