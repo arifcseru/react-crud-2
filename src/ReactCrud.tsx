@@ -36,14 +36,11 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
 
   useEffect(() => {
     let labels = [];
-    for (let crudDataField of crudListData) {
-      for (let key in crudDataField) {
-        const fieldLabel = formEntryData.find((field) => field.name === key)?.label || key;
-        labels.push(fieldLabel);
-      }
+    for (let fieldToShow of fieldsToShow) {
+      const fieldLabel = formEntryData.find((field) => field.name === fieldToShow)?.label || fieldToShow;
+      labels.push(fieldLabel);
     }
     setCrudListDataLabels(labels);
-
   }, []);
 
   const getBengaliDate = (date: Date) => {
@@ -169,7 +166,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
         </Card.Header>
         <Card.Body>
 
-         {currentItems && <div className="table">
+          {currentItems && <div className="table">
             <thead>
               <tr>
                 {crudListDataLabels.map((field) => (
@@ -188,9 +185,9 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
                     <button
                       className="btn btn-warning"
                       onClick={() => {
-                      const selectedItem = currentItems[index];
-                      setFormData(selectedItem);
-                      handleShow();
+                        const selectedItem = currentItems[index];
+                        setFormData(selectedItem);
+                        handleShow();
                       }}
                     >
                       <i className="fa fa-edit"></i> Edit
@@ -198,11 +195,11 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
                     <button
                       className="btn btn-danger"
                       onClick={() => {
-                      if (!window.confirm("Are you sure you want to delete this item?")) {
-                        return;
-                      }
-                      const updatedList = currentItems.filter((_, i) => i !== index);
-                      setCrudListData(updatedList);
+                        if (!window.confirm("Are you sure you want to delete this item?")) {
+                          return;
+                        }
+                        const updatedList = currentItems.filter((_, i) => i !== index);
+                        setCrudListData(updatedList);
                       }}
                     >
                       <i className="fa fa-trash"></i> Delete
