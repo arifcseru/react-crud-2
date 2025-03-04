@@ -188,7 +188,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
                 <h6>{getBengaliDate(time)}</h6>
               </Card.Text> */}
             </div>
-            <div className="col-md-6 align-right">
+            <div className="col-md-3 align-right">
               <Button variant="primary" className="align-right" onClick={() => {
                 setFormData(formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {}));
                 handleShow();
@@ -196,27 +196,30 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
                 Add New
               </Button>
             </div>
-          </div>
-        </Card.Header>
-        <Card.Body>
-          <Container>
-            {currentItems && <table className="table">
-              <div className="row mb-3">
+            <div className="row mb-3">
                 <div className="col-md-6">
                   <input
                     type="text"
                     className="form-control"
                     placeholder="Search..."
                     onChange={(e) => {
+                      console.log(e.target.value);
                       const searchValue = e.target.value.toLowerCase();
                       const filteredData = listData.filter(item =>
-                        fieldsToShow.some(field => item[field].toLowerCase().includes(searchValue))
+                        fieldsToShow.some(field => 
+                          String(item[field]).toLowerCase().includes(searchValue)
+                        )
                       );
                       setCrudListData(filteredData);
                     }}
                   />
                 </div>
               </div>
+          </div>
+        </Card.Header>
+        <Card.Body>
+          <Container>
+            {currentItems && <table className="table">
               <thead>
                 <tr>
                   {crudListDataLabels.map((field) => (
