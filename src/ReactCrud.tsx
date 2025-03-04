@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Modal, Button, Card } from 'react-bootstrap';
+import ReactPaginate from 'react-paginate';
 
 interface Field {
   isRequired: boolean;
@@ -59,6 +60,17 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
 
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 10;
+
+  const handlePageClick = (data: { selected: number }) => {
+    setCurrentPage(data.selected);
+  };
+
+  const offset = currentPage * itemsPerPage;
+  const currentItems = crudListData.slice(offset, offset + itemsPerPage);
+
+
   return (
     <div className="container">
       <Modal show={showModal} onHide={handleClose}>
@@ -76,7 +88,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
                 }
               }
 
-              dataStoreHook(formData).then(() => {
+              dataStoreHook(formData).then((updatedFormData) => {
                 const existingIndex = crudListData.findIndex(item => item.id === formData.id);
 
                 if (existingIndex !== -1) {
@@ -86,6 +98,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
 
                   setCrudListData(updatedList);
                 } else {
+                  console.log(updatedFormData);
                   const updatedList = [...crudListData, formData];
                   setCrudListData(updatedList);
                 }
@@ -144,9 +157,9 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
           <div className="row">
             <div className="col-md-6">
               <h3>{formTitle}</h3>
-              <Card.Text>
+              {/* <Card.Text>
                 <h6>{getBengaliDate(time)}</h6>
-              </Card.Text>
+              </Card.Text> */}
             </div>
             <div className="col-md-6 align-right">
               <Button variant="primary" className="align-right" onClick={handleShow}>
@@ -176,27 +189,26 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
                     <button
                       className="btn btn-warning"
                       onClick={() => {
-                        const selectedItem = crudListData[index];
-                        setFormData(selectedItem);
+                      const selectedItem = crudListData[index];
+                      setFormData(selectedItem);
+                      handleShow();
                       }}
                     >
-                      Edit
+                      <i className="fa fa-edit"></i> Edit
                     </button>
                     <button
                       className="btn btn-danger"
                       onClick={() => {
-                        if (!window.confirm("Are you sure you want to delete this item?")) {
-                          return;
-                        }
-                        const updatedList = crudListData.filter((_, i) => i !== index);
-                        // Assuming you have a state to manage listData, you need to update it here
-                        // For example, if you have a state like `const [data, setData] = useState(listData);`
-                        // You would call `setData(updatedList);`
-                        setCrudListData(updatedList);
+                      if (!window.confirm("Are you sure you want to delete this item?")) {
+                        return;
+                      }
+                      const updatedList = crudListData.filter((_, i) => i !== index);
+                      setCrudListData(updatedList);
                       }}
                     >
-                      Delete
+                      <i className="fa fa-trash"></i> Delete
                     </button>
+
                   </td>
                 </tr>
               ))}
@@ -204,6 +216,22 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
           </div>
           }
         </Card.Body>
+        <Card.Footer>
+          <Card.Footer>
+            <ReactPaginate
+              previousLabel={'previous'}
+              nextLabel={'next'}
+              breakLabel={'...'}
+              breakClassName={'break-me'}
+              pageCount={Math.ceil(crudListData.length / itemsPerPage)}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageClick}
+              containerClassName={'pagination'}
+              activeClassName={'active'}
+            />
+          </Card.Footer>
+        </Card.Footer>
 
       </Card>
     </div>
