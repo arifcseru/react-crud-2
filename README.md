@@ -20,6 +20,15 @@ import { ReactCrud } from 'react-crud-2';
 
 const formData = [
   {
+    isRequired: false,
+    name: "id",
+    type: "hidden",
+    label: "Id",
+    placeholder: "Enter your id",
+    value: ""
+  },
+  {
+    isRequired: true,
     name: "firstName",
     type: "text",
     label: "First Name",
@@ -28,12 +37,21 @@ const formData = [
     isRequired: true
   },
   {
+    isRequired: true,
     name: "lastName",
     type: "text",
     label: "Last Name",
     placeholder: "Enter your last name",
     value: "",
     isRequired: false
+  },
+  {
+    isRequired: true,
+    name: "dob",
+    type: "date",
+    label: "Date Of Birth",
+    placeholder: "Enter Date Of Birth",
+    value: ""
   },
   {
     name: "email",
@@ -44,6 +62,7 @@ const formData = [
     isRequired: true
   },
   {
+    isRequired: true,
     name: "address",
     type: "textarea",
     label: "Address",
@@ -52,6 +71,39 @@ const formData = [
     isRequired: false
   }
 ];
+
+const saveEmployee = (formData) => {
+  return new Promise((resolve, reject) => {
+    console.log("Store Data triggered.");
+    axios.post("https://jsonplaceholder.typicode.com/todos", formData)
+      .then(response => {
+        console.log("Data successfully posted:", response.data);
+        resolve(response.data);
+      })
+      .catch(error => {
+        console.error("There was an error posting the data:", error);
+        reject(error);
+      });
+  });
+}
+
+
+const deleteEmployee = (id) => {
+  return new Promise((resolve, reject) => {
+    console.log("Delete Data triggered.");
+    axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
+      .then(response => {
+        console.log("Data successfully deleted:", response.data);
+        resolve(response.data);
+      })
+      .catch(error => {
+        console.error("There was an error deleting the data:", error);
+        reject(error);
+      });
+  });
+}
+
+const listData = [{ 'id': 1, name: 'John', email: 'test@mail.com' }];
 
 const dataStoreHook = async (formData) => {
   console.log("Storing data:", formData);
@@ -66,9 +118,9 @@ function App() {
   return (
     <div>
       <div className="App">
-        <ReactCrud 
-          formTitle="Employee Data"
-          dataStoreHook={dataStoreHook}
+        <ReactCrud formTitle={"Employee Data"}
+          dataStoreHook={saveEmployee}
+          dataRemoveHook={deleteEmployee}
           formEntryData={formData}
           listData={listData}
           fieldsToShow={fieldsToShow}
