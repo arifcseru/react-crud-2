@@ -189,7 +189,10 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
               </Card.Text> */}
             </div>
             <div className="col-md-6 align-right">
-              <Button variant="primary" className="align-right" onClick={handleShow}>
+              <Button variant="primary" className="align-right" onClick={() => {
+                setFormData(formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {}));
+                handleShow();
+              }}>
                 Add New
               </Button>
             </div>
@@ -198,6 +201,22 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
         <Card.Body>
           <Container>
             {currentItems && <table className="table">
+              <div className="row mb-3">
+                <div className="col-md-6">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search..."
+                    onChange={(e) => {
+                      const searchValue = e.target.value.toLowerCase();
+                      const filteredData = listData.filter(item =>
+                        fieldsToShow.some(field => item[field].toLowerCase().includes(searchValue))
+                      );
+                      setCrudListData(filteredData);
+                    }}
+                  />
+                </div>
+              </div>
               <thead>
                 <tr>
                   {crudListDataLabels.map((field) => (
@@ -223,15 +242,15 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
                       >
                         <i className="fa fa-edit"></i> Edit
                       </button>
-                        <button
+                      <button
                         className="btn btn-danger"
                         onClick={() => {
                           setSelectedItemToDelete(currentItems[index]);
                           setShowDeleteModal(true);
                         }}
-                        >
+                      >
                         <i className="fa fa-trash"></i> Delete
-                        </button>
+                      </button>
 
                     </td>
                   </tr>
