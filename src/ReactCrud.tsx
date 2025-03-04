@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Modal, Button } from 'react-bootstrap';
 
 interface Field {
   isRequired: boolean;
@@ -53,83 +54,98 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
     setFormData({ ...formData, [name]: value });
   };
 
+  const [showModal, setShowModal] = useState(false);
+
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
+
   return (
     <div className="container">
-      <h2>{formTitle}</h2>
+      {formTitle}
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          for (let field of formEntryData) {
-            if (field.isRequired && !formData[field.name]) {
-              alert(`${field.label} is required`);
-              return;
-            }
-          }
+      <Button variant="primary" onClick={handleShow}>
+        Add New
+      </Button>
 
-          //const updatedList = [...crudListData, formData];
-          //setCrudListData(updatedList);
-          // setFormData(formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {}));
+      <Modal show={showModal} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>{formTitle}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              for (let field of formEntryData) {
+                if (field.isRequired && !formData[field.name]) {
+                  alert(`${field.label} is required`);
+                  return;
+                }
+              }
 
-          dataStoreHook(formData).then(() => {
-            const existingIndex = crudListData.findIndex(item => item.id === formData.id);
+              dataStoreHook(formData).then(() => {
+                const existingIndex = crudListData.findIndex(item => item.id === formData.id);
 
-            if (existingIndex !== -1) {
-              const updatedList = crudListData.map((item, index) =>
-                index === existingIndex ? formData : item
-              );
+                if (existingIndex !== -1) {
+                  const updatedList = crudListData.map((item, index) =>
+                    index === existingIndex ? formData : item
+                  );
 
-              setCrudListData(updatedList);
-            } else {
-              const updatedList = [...crudListData, formData];
-              setCrudListData(updatedList);
-            }
-            setFormData(formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {}));
-          }).catch((error) => {
-            console.error("Error storing data:", error);
-            alert("Failed to store data. Please try again.");
-          });
-        }}
-      >
-        {formEntryData.map((field) => (
-          <div key={field.name} className="row mb-3">
-            {(field.type != 'hidden') && <div className="col col-md-3" >
-              <label htmlFor={field.name} className="form-label">
-                {field.label}
-              </label>
-            </div>}
-            {(field.type != 'hidden') && <div className="col col-md-9">
-              {(field.type == 'text' || field.type == 'date' || field.type == 'number' || field.type == 'email') &&
-                <input
-                  type={field.type}
+                  setCrudListData(updatedList);
+                } else {
+                  const updatedList = [...crudListData, formData];
+                  setCrudListData(updatedList);
+                }
+                setFormData(formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {}));
+                handleClose();
+              }).catch((error) => {
+                console.error("Error storing data:", error);
+                alert("Failed to store data. Please try again.");
+              });
+            }}
+          >
+            {formEntryData.map((field) => (
+              <div key={field.name} className="row mb-3">
+                {(field.type != 'hidden') && <div className="col col-md-3" >
+                  <label htmlFor={field.name} className="form-label">
+                    {field.label}
+                  </label>
+                </div>}
+                {(field.type != 'hidden') && <div className="col col-md-9">
+                  {(field.type == 'text' || field.type == 'date' || field.type == 'number' || field.type == 'email') &&
+                    <input
+                      type={field.type}
+                      className="form-control"
+                      name={field.name}
+                      placeholder={field.placeholder}
+                      value={formData[field.name]}
+                      onChange={handleChange}
+                    />}
+
+                  {(field.type == 'textarea') &&
+                    <textarea
+                      className="form-control"
+                      name={field.name}
+                      placeholder={field.placeholder}
+                      onChange={handleChange}
+                    >{formData[field.name]}</textarea>}
+                </div>}
+
+                {(field.type == 'hidden') && <input
+                  type={'hidden'}
                   className="form-control"
                   name={field.name}
-                  placeholder={field.placeholder}
                   value={formData[field.name]}
-                  onChange={handleChange}
                 />}
+              </div>
+            ))}
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+          </form>
+        </Modal.Body>
+      </Modal>
 
-              {(field.type == 'textarea') &&
-                <textarea
-                  className="form-control"
-                  name={field.name}
-                  placeholder={field.placeholder}
-                  onChange={handleChange}
-                >{formData[field.name]}</textarea>}
-            </div>}
-
-            {(field.type == 'hidden') && <input
-              type={'hidden'}
-              className="form-control"
-              name={field.name}
-              value={formData[field.name]}
-            />}
-          </div>
-        ))}
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
-      </form>
+      
 
       {crudListData && <div className="table">
         <thead>
