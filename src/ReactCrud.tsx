@@ -68,8 +68,37 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
   const offset = currentPage * itemsPerPage;
   const currentItems = crudListData.slice(offset, offset + itemsPerPage);
 
+  const [selectedItemToDelete, setSelectedItemToDelete] = useState<{ [key: string]: string } | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleDelete = () => {
+    if (selectedItemToDelete) {
+      const updatedList = crudListData.filter(item => item !== selectedItemToDelete);
+      setCrudListData(updatedList);
+      setShowDeleteModal(false);
+      setSelectedItemToDelete(null);
+    }
+  };
+
   return (
     <div className="container">
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this item?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>{formTitle}</Modal.Title>
@@ -193,18 +222,15 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
                       >
                         <i className="fa fa-edit"></i> Edit
                       </button>
-                      <button
+                        <button
                         className="btn btn-danger"
                         onClick={() => {
-                          if (!window.confirm("Are you sure you want to delete this item?")) {
-                            return;
-                          }
-                          const updatedList = currentItems.filter((_, i) => i !== index);
-                          setCrudListData(updatedList);
+                          setSelectedItemToDelete(currentItems[index]);
+                          setShowDeleteModal(true);
                         }}
-                      >
+                        >
                         <i className="fa fa-trash"></i> Delete
-                      </button>
+                        </button>
 
                     </td>
                   </tr>
