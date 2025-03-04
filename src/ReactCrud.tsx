@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-paginate/theme/basic/react-paginate.css';
-import { Modal, Button, Card, Container } from 'react-bootstrap';
+import { Modal, Button, Card, Container, Row, Col } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import 'font-awesome/css/font-awesome.min.css';
 
@@ -18,12 +18,13 @@ interface ReactCrudProps {
   formTitle: string;
   formEntryData: Field[];
   dataStoreHook: (formData: { [key: string]: string }) => Promise<void>;
+  dataRemoveHook: (formData: { [key: string]: string }) => Promise<void>;
   listData: { [key: string]: string }[];
   fieldsToShow: string[];
   apiUrl: string;
 }
 
-const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEntryData, listData, fieldsToShow, apiUrl }) => {
+const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, formTitle, formEntryData, listData, fieldsToShow, apiUrl }) => {
   const [time, setTime] = useState(new Date());
   const [formData, setFormData] = useState<{ [key: string]: string }>(
     formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {})
@@ -45,9 +46,6 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
     setCrudListDataLabels(labels);
   }, []);
 
-  const getBengaliDate = (date: Date) => {
-    return date.toLocaleDateString("bn-BD");
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -181,41 +179,36 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
 
       <Card>
         <Card.Header>
-          <div className="row">
-            <div className="col-md-6">
+          <Row>
+            <Col md={6}>
               <h3>{formTitle}</h3>
-              {/* <Card.Text>
-                <h6>{getBengaliDate(time)}</h6>
-              </Card.Text> */}
-            </div>
-            <div className="col-md-3 align-right">
-              <Button variant="primary" className="align-right" onClick={() => {
+            </Col>
+            <Col md={3} className="float-right">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search..."
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  const searchValue = e.target.value.toLowerCase();
+                  const filteredData = listData.filter(item =>
+                    fieldsToShow.some(field =>
+                      String(item[field]).toLowerCase().includes(searchValue)
+                    )
+                  );
+                  setCrudListData(filteredData);
+                }}
+              />
+            </Col>
+            <Col md={3} className="float-right">
+              <Button variant="primary" className="float-right" onClick={() => {
                 setFormData(formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {}));
                 handleShow();
               }}>
                 Add New
               </Button>
-            </div>
-            <div className="row mb-3">
-                <div className="col-md-6">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Search..."
-                    onChange={(e) => {
-                      console.log(e.target.value);
-                      const searchValue = e.target.value.toLowerCase();
-                      const filteredData = listData.filter(item =>
-                        fieldsToShow.some(field => 
-                          String(item[field]).toLowerCase().includes(searchValue)
-                        )
-                      );
-                      setCrudListData(filteredData);
-                    }}
-                  />
-                </div>
-              </div>
-          </div>
+            </Col>
+          </Row>
         </Card.Header>
         <Card.Body>
           <Container>
@@ -262,23 +255,20 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
             </table>
             }
           </Container>
-
         </Card.Body>
         <Card.Footer>
-          <Card.Footer>
-            <ReactPaginate
-              previousLabel={'previous'}
-              nextLabel={'next'}
-              breakLabel={'...'}
-              breakClassName={'break-me'}
-              pageCount={Math.ceil(crudListData.length / itemsPerPage)}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={5}
-              onPageChange={handlePageClick}
-              containerClassName={'pagination'}
-              activeClassName={'active'}
-            />
-          </Card.Footer>
+          <ReactPaginate
+            previousLabel={'previous'}
+            nextLabel={'next'}
+            breakLabel={'...'}
+            breakClassName={'break-me'}
+            pageCount={Math.ceil(crudListData.length / itemsPerPage)}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageClick}
+            containerClassName={'pagination'}
+            activeClassName={'active'}
+          />
         </Card.Footer>
 
       </Card>
