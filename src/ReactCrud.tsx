@@ -229,7 +229,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
                     ))}
                     <td>
                       <button
-                        className="btn btn-sm btn-warning mt-1"
+                        className="btn btn-sm btn-warning"
                         onClick={() => {
                           const selectedItem = currentItems[index];
                           setFormData(selectedItem);
