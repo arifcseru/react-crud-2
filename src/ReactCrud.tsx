@@ -72,16 +72,12 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
           // setFormData(formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {}));
 
           dataStoreHook(formData).then(() => {
-            console.log("formData:", JSON.stringify(formData));
             const existingIndex = crudListData.findIndex(item => item.id === formData.id);
-            console.log("existingIndex:", existingIndex);
 
             if (existingIndex !== -1) {
-              console.log(crudListData);
               const updatedList = crudListData.map((item, index) =>
                 index === existingIndex ? formData : item
               );
-              console.log(updatedList);
 
               setCrudListData(updatedList);
             } else {
@@ -135,7 +131,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
         </button>
       </form>
 
-      {listData && <div className="table">
+      {crudListData && <div className="table">
         <thead>
           <tr>
             {crudListDataLabels.map((field) => (
@@ -154,7 +150,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
                 <button
                   className="btn btn-warning"
                   onClick={() => {
-                    const selectedItem = listData[index];
+                    const selectedItem = crudListData[index];
                     setFormData(selectedItem);
                   }}
                 >
@@ -166,7 +162,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
                     if (!window.confirm("Are you sure you want to delete this item?")) {
                       return;
                     }
-                    const updatedList = listData.filter((_, i) => i !== index);
+                    const updatedList = crudListData.filter((_, i) => i !== index);
                     // Assuming you have a state to manage listData, you need to update it here
                     // For example, if you have a state like `const [data, setData] = useState(listData);`
                     // You would call `setData(updatedList);`
