@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Card } from 'react-bootstrap';
 
 interface Field {
   isRequired: boolean;
@@ -61,12 +61,6 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
 
   return (
     <div className="container">
-      {formTitle}
-
-      <Button variant="primary" onClick={handleShow}>
-        Add New
-      </Button>
-
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>{formTitle}</Modal.Title>
@@ -145,54 +139,73 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
         </Modal.Body>
       </Modal>
 
-      
+      <Card>
+        <Card.Header>
+          <div className="row">
+            <div className="col-md-6">
+              <h3>{formTitle}</h3>
+              <Card.Text>
+                <h6>{getBengaliDate(time)}</h6>
+              </Card.Text>
+            </div>
+            <div className="col-md-6 align-right">
+              <Button variant="primary" className="align-right" onClick={handleShow}>
+                Add New
+              </Button>
+            </div>
+          </div>
+        </Card.Header>
+        <Card.Body>
 
-      {crudListData && <div className="table">
-        <thead>
-          <tr>
-            {crudListDataLabels.map((field) => (
-              <th key={field}>{field}</th>
-            ))}
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {crudListData.map((item, index) => (
-            <tr key={index}>
-              {fieldsToShow.map((field) => (
-                <td key={field}>{item[field]}</td>
+         {crudListData && <div className="table">
+            <thead>
+              <tr>
+                {crudListDataLabels.map((field) => (
+                  <th key={field}>{field}</th>
+                ))}
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {crudListData.map((item, index) => (
+                <tr key={index}>
+                  {fieldsToShow.map((field) => (
+                    <td key={field}>{item[field]}</td>
+                  ))}
+                  <td>
+                    <button
+                      className="btn btn-warning"
+                      onClick={() => {
+                        const selectedItem = crudListData[index];
+                        setFormData(selectedItem);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => {
+                        if (!window.confirm("Are you sure you want to delete this item?")) {
+                          return;
+                        }
+                        const updatedList = crudListData.filter((_, i) => i !== index);
+                        // Assuming you have a state to manage listData, you need to update it here
+                        // For example, if you have a state like `const [data, setData] = useState(listData);`
+                        // You would call `setData(updatedList);`
+                        setCrudListData(updatedList);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
               ))}
-              <td>
-                <button
-                  className="btn btn-warning"
-                  onClick={() => {
-                    const selectedItem = crudListData[index];
-                    setFormData(selectedItem);
-                  }}
-                >
-                  Edit
-                </button>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => {
-                    if (!window.confirm("Are you sure you want to delete this item?")) {
-                      return;
-                    }
-                    const updatedList = crudListData.filter((_, i) => i !== index);
-                    // Assuming you have a state to manage listData, you need to update it here
-                    // For example, if you have a state like `const [data, setData] = useState(listData);`
-                    // You would call `setData(updatedList);`
-                    setCrudListData(updatedList);
-                  }}
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </div>
-      }
+            </tbody>
+          </div>
+          }
+        </Card.Body>
+
+      </Card>
     </div>
   );
 };
