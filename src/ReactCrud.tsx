@@ -212,7 +212,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
         </Card.Header>
         <Card.Body>
           <Container>
-            {currentItems && <table className="table">
+            {currentItems && <table className="table table-striped">
               <thead>
                 <tr>
                   {crudListDataLabels.map((field) => (
@@ -229,7 +229,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
                     ))}
                     <td>
                       <button
-                        className="btn btn-warning"
+                        className="btn btn-sm btn-warning mt-1"
                         onClick={() => {
                           const selectedItem = currentItems[index];
                           setFormData(selectedItem);
@@ -239,7 +239,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
                         <i className="fa fa-edit"></i> Edit
                       </button>
                       <button
-                        className="btn btn-danger"
+                        className="btn btn-sm btn-danger"
                         onClick={() => {
                           setSelectedItemToDelete(currentItems[index]);
                           setShowDeleteModal(true);
