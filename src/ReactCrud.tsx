@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import 'react-paginate/dist/react-paginate.css';
-import { Modal, Button, Card } from 'react-bootstrap';
+import 'react-paginate/theme/basic/react-paginate.css';
+import { Modal, Button, Card, Container } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 
 interface Field {
@@ -166,52 +166,54 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, formTitle, formEnt
           </div>
         </Card.Header>
         <Card.Body>
-
-          {currentItems && <table className="table">
-            <thead>
-              <tr>
-                {crudListDataLabels.map((field) => (
-                  <th key={field}>{field}</th>
-                ))}
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentItems.map((item, index) => (
-                <tr key={index}>
-                  {fieldsToShow.map((field) => (
-                    <td key={field}>{item[field]}</td>
+          <Container>
+            {currentItems && <table className="table">
+              <thead>
+                <tr>
+                  {crudListDataLabels.map((field) => (
+                    <th key={field}>{field}</th>
                   ))}
-                  <td>
-                    <button
-                      className="btn btn-warning"
-                      onClick={() => {
-                        const selectedItem = currentItems[index];
-                        setFormData(selectedItem);
-                        handleShow();
-                      }}
-                    >
-                      <i className="fa fa-edit"></i> Edit
-                    </button>
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => {
-                        if (!window.confirm("Are you sure you want to delete this item?")) {
-                          return;
-                        }
-                        const updatedList = currentItems.filter((_, i) => i !== index);
-                        setCrudListData(updatedList);
-                      }}
-                    >
-                      <i className="fa fa-trash"></i> Delete
-                    </button>
-
-                  </td>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          }
+              </thead>
+              <tbody>
+                {currentItems.map((item, index) => (
+                  <tr key={index}>
+                    {fieldsToShow.map((field) => (
+                      <td key={field}>{item[field]}</td>
+                    ))}
+                    <td>
+                      <button
+                        className="btn btn-warning"
+                        onClick={() => {
+                          const selectedItem = currentItems[index];
+                          setFormData(selectedItem);
+                          handleShow();
+                        }}
+                      >
+                        <i className="fa fa-edit"></i> Edit
+                      </button>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => {
+                          if (!window.confirm("Are you sure you want to delete this item?")) {
+                            return;
+                          }
+                          const updatedList = currentItems.filter((_, i) => i !== index);
+                          setCrudListData(updatedList);
+                        }}
+                      >
+                        <i className="fa fa-trash"></i> Delete
+                      </button>
+
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            }
+          </Container>
+
         </Card.Body>
         <Card.Footer>
           <Card.Footer>
