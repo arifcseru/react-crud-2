@@ -286,6 +286,8 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
             marginPagesDisplayed={2}
             pageRangeDisplayed={5}
             onPageChange={handlePageClick}
+            containerClassName={'react-paginate'}
+            activeClassName={'active'}
           />
         </Card.Footer>
 
