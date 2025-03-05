@@ -25,7 +25,6 @@ interface ReactCrudProps {
 }
 
 const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, formTitle, formEntryData, listData, fieldsToShow, apiUrl }) => {
-  const [time, setTime] = useState(new Date());
   const [formData, setFormData] = useState<{ [key: string]: string }>(
     formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {})
   );
@@ -211,7 +210,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
                 onChange={(e) => {
                   console.log(e.target.value);
                   const searchValue = e.target.value.toLowerCase();
-                  const filteredData = crudListData.filter(item =>
+                  const filteredData = listData.filter(item =>
                     fieldsToShow.some(field =>
                       String(item[field]).toLowerCase().includes(searchValue)
                     )
