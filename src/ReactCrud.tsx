@@ -22,9 +22,10 @@ interface ReactCrudProps {
   listData: { [key: string]: string }[];
   fieldsToShow: string[];
   apiUrl: string;
+  identifierField: string;
 }
 
-const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, formTitle, formEntryData, listData, fieldsToShow, apiUrl }) => {
+const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, formTitle, formEntryData, listData, fieldsToShow, apiUrl, identifierField }) => {
   const [formData, setFormData] = useState<{ [key: string]: string }>(
     formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {})
   );
@@ -71,8 +72,9 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
   const [validationMessage, setValidationMessage] = useState('');
 
   const handleDelete = () => {
+    console.log("Deleting item:", selectedItemToDelete);
     if (selectedItemToDelete) {
-      dataRemoveHook(selectedItemToDelete!).then((resultDeleteData) => {
+      dataRemoveHook(selectedItemToDelete).then((resultDeleteData) => {
         console.log("Result of delete data:", resultDeleteData);
         const updatedList = crudListData.filter((_, index) => index !== selectedItemToDelete);
         setCrudListData(updatedList);
@@ -261,7 +263,10 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
                       <button
                         className="btn btn-sm btn-danger"
                         onClick={() => {
-                          setSelectedItemToDelete(offset + index);
+                          const selectedItem = currentItems[index];
+                          const selectedItemIndex = crudListData.findIndex(item => item[identifierField] === selectedItem[identifierField]);
+                          // setSelectedItemToDelete(offset + index);
+                          setSelectedItemToDelete(selectedItemIndex);
                           setShowDeleteModal(true);
                         }}
                       >
