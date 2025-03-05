@@ -1,7 +1,7 @@
 {
   "name": "react-crud-2",
   "type": "module",
-  "version": "1.0.45",
+  "version": "1.0.46",
   "description": "A CRUD form component helper for React",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
