@@ -72,10 +72,10 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
   const [validationMessage, setValidationMessage] = useState('');
 
   const handleDelete = () => {
-    console.log("Deleting item:", selectedItemToDelete);
+    // console.log("Deleting item:", selectedItemToDelete);
     if (selectedItemToDelete) {
       dataRemoveHook(selectedItemToDelete).then((resultDeleteData) => {
-        console.log("Result of delete data:", resultDeleteData);
+        // console.log("Result of delete data:", resultDeleteData);
         const updatedList = crudListData.filter((_, index) => index !== selectedItemToDelete);
         setCrudListData(updatedList);
         setShowDeleteModal(false);
@@ -101,7 +101,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
             Cancel
           </Button>
           <Button variant="danger" onClick={() => {
-            console.log("going to delete:", selectedItemToDelete);
+            // console.log("going to delete:", selectedItemToDelete);
             handleDelete();
           }}>
             Delete
@@ -134,7 +134,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
 
                   setCrudListData(updatedList);
                 } else {
-                  console.log(updatedFormData);
+                  // console.log(updatedFormData);
                   const updatedList = [...crudListData, formData];
                   setCrudListData(updatedList);
                 }
@@ -213,7 +213,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
                 className="form-control"
                 placeholder="Search..."
                 onChange={(e) => {
-                  console.log(e.target.value);
+                  // console.log(e.target.value);
                   const searchValue = e.target.value.toLowerCase();
                   const filteredData = listData.filter(item =>
                     fieldsToShow.some(field =>
