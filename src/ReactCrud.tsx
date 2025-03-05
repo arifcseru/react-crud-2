@@ -100,7 +100,10 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
             Cancel
           </Button>
-          <Button variant="danger" onClick={handleDelete}>
+          <Button variant="danger" onClick={() => {
+            console.log("going to delete:", selectedItemToDelete);
+            handleDelete();
+          }}>
             Delete
           </Button>
         </Modal.Footer>
