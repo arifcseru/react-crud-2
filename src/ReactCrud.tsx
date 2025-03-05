@@ -258,6 +258,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
                       >
                         <i className="fa fa-edit"></i> Edit
                       </button>
+                      &nbsp;
                       <button
                         className="btn btn-sm btn-danger"
                         onClick={() => {
@@ -287,7 +288,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
             pageRangeDisplayed={5}
             onPageChange={handlePageClick}
             containerClassName={'react-paginate'}
-            activeClassName={'active'}
+            activeLinkClassName={'active'}
           />
         </Card.Footer>
 
