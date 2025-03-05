@@ -266,9 +266,10 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
                       <button
                         className="btn btn-sm btn-danger"
                         onClick={() => {
-                          const selectedItem = currentItems[index];
-                          const selectedItemIndex = crudListData.findIndex(item => item[identifierField] === selectedItem[identifierField]);
+                          // const selectedItem = currentItems[index];
+                          // const selectedItemIndex = crudListData.findIndex(item => item[identifierField] === selectedItem[identifierField]);
                           // setSelectedItemToDelete(offset + index);
+                          const selectedItemIndex = Number(item[identifierField]);
                           setSelectedItemToDelete(selectedItemIndex);
                           setShowDeleteModal(true);
                         }}
