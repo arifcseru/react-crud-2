@@ -18,100 +18,109 @@ Here is an example of how to use the `react-crud-2` component in your React appl
 import React from 'react';
 import { ReactCrud } from 'react-crud-2';
 
-const formData = [
-  {
-    isRequired: false,
-    name: "id",
-    type: "hidden",
-    label: "Id",
-    placeholder: "Enter your id",
-    value: ""
-  },
-  {
-    isRequired: true,
-    name: "firstName",
-    type: "text",
-    label: "First Name",
-    placeholder: "Enter your first name",
-    value: ""
-  },
-  {
-    isRequired: true,
-    name: "lastName",
-    type: "text",
-    label: "Last Name",
-    placeholder: "Enter your last name",
-    value: ""
-  },
-  {
-    isRequired: true,
-    name: "dob",
-    type: "date",
-    label: "Date Of Birth",
-    placeholder: "Enter Date Of Birth",
-    value: ""
-  },
-  {
-    isRequired: true,
-    name: "email",
-    type: "email",
-    label: "Email",
-    placeholder: "Enter your email",
-    value: ""
-  },
-  {
-    isRequired: true,
-    name: "address",
-    type: "textarea",
-    label: "Address",
-    placeholder: "Enter Address",
-    value: ""
-  }
-];
-
-const saveEmployee = (formData) => {
-  return new Promise((resolve, reject) => {
-    console.log("Store Data triggered.");
-    axios.post("https://jsonplaceholder.typicode.com/todos", formData)
-      .then(response => {
-        console.log("Data successfully posted:", response.data);
-        resolve(response.data);
-      })
-      .catch(error => {
-        console.error("There was an error posting the data:", error);
-        reject(error);
-      });
-  });
-}
-
-
-const deleteEmployee = (id) => {
-  return new Promise((resolve, reject) => {
-    console.log("Delete Data triggered.");
-    axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
-      .then(response => {
-        console.log("Data successfully deleted:", response.data);
-        resolve(response.data);
-      })
-      .catch(error => {
-        console.error("There was an error deleting the data:", error);
-        reject(error);
-      });
-  });
-}
-
-const listData = [{ 'id': 1, name: 'John', email: 'test@mail.com' }];
-const fieldsToShow = ['firstName', 'lastName', 'email', 'address'];
-
 function App() {
+  const formData = [
+    {
+      isRequired: false,
+      name: "id",
+      type: "hidden",
+      label: "Id",
+      placeholder: "Enter your id",
+      value: ""
+    },
+    {
+      isRequired: true,
+      name: "firstName",
+      type: "text",
+      label: "First Name",
+      placeholder: "Enter your first name",
+      value: ""
+    },
+    {
+      isRequired: true,
+      name: "lastName",
+      type: "text",
+      label: "Last Name",
+      placeholder: "Enter your last name",
+      value: ""
+    },
+    {
+      isRequired: true,
+      name: "dob",
+      type: "date",
+      label: "Date Of Birth",
+      placeholder: "Enter Date Of Birth",
+      value: ""
+    },
+    {
+      isRequired: true,
+      name: "email",
+      type: "email",
+      label: "Email",
+      placeholder: "Enter your email",
+      value: ""
+    },
+    {
+      isRequired: true,
+      name: "address",
+      type: "textarea",
+      label: "Address",
+      placeholder: "Enter Address",
+      value: ""
+    }
+  ];
+  const saveEmployee = (formData) => {
+    return new Promise((resolve, reject) => {
+      console.log("Store Data triggered.");
+      axios.post("https://jsonplaceholder.typicode.com/todos", formData)
+        .then(response => {
+          console.log("Data successfully posted:", response.data);
+          resolve(response.data);
+        })
+        .catch(error => {
+          console.error("There was an error posting the data:", error);
+          reject(error);
+        });
+    });
+  }
+
+
+  const deleteEmployee = (id) => {
+    return new Promise((resolve, reject) => {
+      console.log("Delete Data triggered.");
+      axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
+        .then(response => {
+          console.log("Data successfully deleted:", response.data);
+          setListData(prevListData => prevListData.filter(employee => employee.id !== id));
+          resolve(response.data);
+        })
+        .catch(error => {
+          console.error("There was an error deleting the data:", error);
+          reject(error);
+        });
+    });
+  }
+
+  const fieldsToShow = ['id', 'firstName', 'lastName', 'email', 'address'];
+  const [listData, setListData] = useState(Array.from({ length: 30 }, (v, i) => ({
+    id: i + 1,
+    firstName: `FirstName${i + 1}`,
+    lastName: `LastName${i + 1}`,
+    dob: `2000-01-${String(i + 1).padStart(2, '0')}`,
+    email: `user${i + 1}@mail.com`,
+    address: `Address ${i + 1}, City, Country`
+  })));
+
   return (
     <div>
-      <div className="App">
-        <ReactCrud formTitle={"Employee Data"}
+      <h1 className="text-center mt-5">React-Crud-2</h1>
+      <div className="App mt-3">
+        <ReactCrud formTitle={"Employee Information"}
+          identifierField={"id"}
           dataStoreHook={saveEmployee}
           dataRemoveHook={deleteEmployee}
-          formEntryData={formData}
           listData={listData}
+          formEntryData={formData}
           fieldsToShow={fieldsToShow} />
       </div>
     </div>
@@ -134,7 +143,8 @@ The `ReactCrud` component accepts the following props:
 | `listData`      | {[key: string]: string}[]                | Data to display in the table                       |
 | `fieldsToShow`  | string[]                                 | Fields from listData to display as table columns   |
 | `apiUrl`        | string                                   | API URL for data operations (currently unused)     |
-| `language`      | string                                   | The language code for the watch display. Supported languages: `en`, `bd`, `es`, `fr`, `de`, etc. |
+| `dataRemoveHook` | (id: string) => Promise<void> | Function to handle data deletion |
+| `identifierField` | string | The unique identifier field name in the data |
 
 ## Features
 
@@ -144,14 +154,18 @@ The `ReactCrud` component accepts the following props:
 - Pagination support
 - Search functionality
 - Responsive Bootstrap-based UI
-- Font Awesome icons for better user experience
+- Customizable form fields
+
 
 ## Dependencies
 
 This component requires:
 - Bootstrap (for responsive UI)
 - Font Awesome (for icons)
-
+- React (for building the user interface)
+- PropTypes (for type-checking props)
+- React Bootstrap (for Bootstrap components in React)
+- React Icons (for using icons in React)
 ## Field Interface
 
 Each field in the `formEntryData` array should have the following properties:
@@ -162,7 +176,6 @@ Each field in the `formEntryData` array should have the following properties:
 | `name`        | string  | Name of the field (used as identifier)            |
 | `type`        | string  | Field type (text, email, textarea, date, hidden, etc.) |
 | `label`       | string  | Field label displayed in the form                 |
-| `placeholder` | string  | Placeholder text for the field                    |
 | `value`       | string  | Default value for the field                       |
 
 ## License

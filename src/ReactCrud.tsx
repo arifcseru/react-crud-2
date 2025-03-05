@@ -48,6 +48,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setNotificationMessage('');
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -69,9 +70,10 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
 
   const [selectedItemToDelete, setSelectedItemToDelete] = useState<number | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [validationMessage, setValidationMessage] = useState('');
+  const [notificationMessage, setNotificationMessage] = useState('');
 
   const handleDelete = () => {
+    setNotificationMessage('');
     // console.log("Deleting item:", selectedItemToDelete);
     if (selectedItemToDelete) {
       dataRemoveHook(selectedItemToDelete).then((resultDeleteData) => {
@@ -82,7 +84,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
         setSelectedItemToDelete(null);
       }).catch((error) => {
         console.error("Error deleting data:", error);
-        alert("Failed to delete data. Please try again.");
+        setNotificationMessage("Failed to delete data. Please try again.");
       });
     }
   };
@@ -100,6 +102,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
             Cancel
           </Button>
+          {notificationMessage && <div className="alert alert-danger">{notificationMessage}</div>}
           <Button variant="danger" onClick={() => {
             // console.log("going to delete:", selectedItemToDelete);
             handleDelete();
@@ -109,17 +112,18 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
         </Modal.Footer>
       </Modal>
 
-      <Modal show={showModal} onHide={handleClose}>
+      <Modal show={showModal} size="lg" onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{formTitle}</Modal.Title>
+          <Modal.Title className="text-left">{formTitle}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form
             onSubmit={(e) => {
               e.preventDefault();
+              setNotificationMessage('');
               for (let field of formEntryData) {
                 if (field.isRequired && !formData[field.name]) {
-                  setValidationMessage(`${field.label} is required`);
+                  setNotificationMessage(`${field.label} is required`);
                   return;
                 }
               }
@@ -142,7 +146,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
                 handleClose();
               }).catch((error) => {
                 console.error("Error storing data:", error);
-                alert("Failed to store data. Please try again.");
+                setNotificationMessage("Failed to store data. Please try again.");
               });
             }}
           >
@@ -181,7 +185,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
                 />}
               </div>
             ))}
-            {validationMessage && <div className="alert alert-danger">{validationMessage}</div>}
+            {notificationMessage && <div className="alert alert-danger">{notificationMessage}</div>}
             <div className="row mb-3">
               <div className="col col-md-3">
                 <Button variant="secondary" onClick={() => {
@@ -205,7 +209,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
         <Card.Header>
           <Row>
             <Col md={6}>
-              <h3>{formTitle}</h3>
+              <h3 style={{ "textAlign": "left" }}>{formTitle}</h3>
             </Col>
             <Col md={3} className="float-right">
               <input
@@ -257,6 +261,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
                         onClick={() => {
                           const selectedItem = currentItems[index];
                           setFormData(selectedItem);
+                          setNotificationMessage('');
                           handleShow();
                         }}
                       >
