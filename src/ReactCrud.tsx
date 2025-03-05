@@ -18,7 +18,7 @@ interface ReactCrudProps {
   formTitle: string;
   formEntryData: Field[];
   dataStoreHook: (formData: { [key: string]: string }) => Promise<void>;
-  dataRemoveHook: (formData: { [key: string]: string }) => Promise<void>;
+  dataRemoveHook: (indexToRemove: number) => Promise<void>;
   listData: { [key: string]: string }[];
   fieldsToShow: string[];
   apiUrl: string;
@@ -67,15 +67,22 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
   const offset = currentPage * itemsPerPage;
   const currentItems = crudListData.slice(offset, offset + itemsPerPage);
 
-  const [selectedItemToDelete, setSelectedItemToDelete] = useState<{ [key: string]: string } | null>(null);
+  const [selectedItemToDelete, setSelectedItemToDelete] = useState<number | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [validationMessage, setValidationMessage] = useState('');
 
   const handleDelete = () => {
     if (selectedItemToDelete) {
-      const updatedList = crudListData.filter(item => item !== selectedItemToDelete);
-      setCrudListData(updatedList);
-      setShowDeleteModal(false);
-      setSelectedItemToDelete(null);
+      dataRemoveHook(selectedItemToDelete!).then((resultDeleteData) => {
+        console.log("Result of delete data:", resultDeleteData);
+        const updatedList = crudListData.filter((_, index) => index !== selectedItemToDelete);
+        setCrudListData(updatedList);
+        setShowDeleteModal(false);
+        setSelectedItemToDelete(null);
+      }).catch((error) => {
+        console.error("Error deleting data:", error);
+        alert("Failed to delete data. Please try again.");
+      });
     }
   };
 
@@ -108,7 +115,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
               e.preventDefault();
               for (let field of formEntryData) {
                 if (field.isRequired && !formData[field.name]) {
-                  alert(`${field.label} is required`);
+                  setValidationMessage(`${field.label} is required`);
                   return;
                 }
               }
@@ -170,9 +177,22 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
                 />}
               </div>
             ))}
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
+            {validationMessage && <div className="alert alert-danger">{validationMessage}</div>}
+            <div className="row mb-3">
+              <div className="col col-md-3">
+                <Button variant="secondary" onClick={() => {
+                  setFormData(formEntryData.reduce((acc, field) => ({ ...acc, [field.name]: field.value }), {}));
+                  handleClose();
+                }}>
+                  Cancel
+                </Button>
+              </div>
+              <div className="col col-md-9">
+                <Button variant="primary" type="submit">
+                  Submit
+                </Button>
+              </div>
+            </div>
           </form>
         </Modal.Body>
       </Modal>
@@ -191,7 +211,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
                 onChange={(e) => {
                   console.log(e.target.value);
                   const searchValue = e.target.value.toLowerCase();
-                  const filteredData = listData.filter(item =>
+                  const filteredData = crudListData.filter(item =>
                     fieldsToShow.some(field =>
                       String(item[field]).toLowerCase().includes(searchValue)
                     )
@@ -241,7 +261,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
                       <button
                         className="btn btn-sm btn-danger"
                         onClick={() => {
-                          setSelectedItemToDelete(currentItems[index]);
+                          setSelectedItemToDelete(offset + index);
                           setShowDeleteModal(true);
                         }}
                       >
@@ -266,7 +286,7 @@ const ReactCrud: React.FC<ReactCrudProps> = ({ dataStoreHook, dataRemoveHook, fo
             marginPagesDisplayed={2}
             pageRangeDisplayed={5}
             onPageChange={handlePageClick}
-            containerClassName={'pagination'}
+            containerClassName={'react-paginate'}
             activeClassName={'active'}
           />
         </Card.Footer>
